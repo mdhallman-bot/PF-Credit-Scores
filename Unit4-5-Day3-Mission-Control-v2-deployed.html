@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 3 — Your Financial Reputation</title>
+<style>
+:root{--ink:#17202a;--navy:#17365d;--gold:#b28b2f;--paper:#fbfaf7;--panel:#eef3f8;--ok:#e7f5e9;--warn:#fff3d8;--bad:#fbe9e7}
+*{box-sizing:border-box} body{font-family:Arial,sans-serif;max-width:980px;margin:auto;padding:18px;color:var(--ink);line-height:1.5}
+h1,h2,h3{color:var(--navy)} h1{margin-bottom:2px}.sub{color:#566}
+.top{position:sticky;top:0;z-index:10;background:white;border-bottom:2px solid var(--gold);padding:10px 0}
+.status{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.pill{background:var(--panel);padding:5px 9px;border-radius:14px;font-size:.85rem}
+.mission{border:1px solid #ccd5df;border-radius:10px;padding:18px;margin:20px 0;background:#fff}
+.prompt{background:var(--paper);border-left:5px solid var(--gold);padding:12px 15px}
+button,.btn{border:1px solid var(--navy);background:white;color:var(--navy);padding:9px 13px;border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block;margin:4px}
+button.primary,.btn.primary{background:var(--navy);color:white}
+input,textarea,select{width:100%;padding:9px;border:1px solid #bbb;border-radius:5px;font:inherit} textarea{min-height:90px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.card{border:1px solid #d7dce2;border-radius:8px;padding:12px}
+.report{font-family:Arial,sans-serif;border:2px solid #555;padding:14px;background:#fff}.acct{border-top:1px solid #aaa;padding:10px 0}
+.reveal{background:var(--panel);padding:10px;border-radius:6px;margin-top:8px}.hidden{display:none}
+.factor{border:1px solid #ccc;border-radius:8px;padding:12px;margin:8px 0}.factor .choices{display:flex;gap:6px;flex-wrap:wrap}
+.feedback{margin-top:8px;padding:9px;border-radius:5px;background:var(--panel)}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #bbb;padding:8px;vertical-align:top}th{background:var(--panel)}
+.vocab{border-bottom:1px dotted var(--navy);cursor:help}
+.savebox{font-size:.85rem;color:#556}.warn{background:var(--warn);padding:10px;border-radius:6px}.ok{background:var(--ok);padding:10px;border-radius:6px}
+.quizq{margin:15px 0;padding:12px;border:1px solid #ddd;border-radius:8px}.quizq label{display:block;margin:5px 0}
+@media(max-width:600px){body{padding:10px}.top{position:static}}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>Day 3 — Your Financial Reputation</h1>
+  <div class="sub">How do lenders decide whether—and on what terms—to lend to you?</div>
+  <div class="status">
+    <span class="pill">Completion: <b id="pct">0%</b></span>
+    <span class="pill">Save: <b id="saveStatus">Local only</b></span>
+    <button onclick="saveNow()">Save Now</button>
+    <button onclick="downloadPDF(false)">Save PDF</button>
+    <button onclick="downloadPDF(true)">Emergency PDF</button>
+  </div>
+</div>
+
+<div class="mission">
+<h2>Start Here — Your Student Code</h2>
+<p>Enter your teacher-assigned code. Do not enter your real name, email, address, phone number, date of birth, SSN, income, or account information.</p>
+<input id="studentCode" placeholder="Example: Falcon217">
+<button class="primary" onclick="startSession()">Start / Restore</button>
+<div id="idMsg" class="savebox"></div>
+</div>
+
+<div class="mission">
+<h2>Mission 1 — MOVE: Would You Lend?</h2>
+<div class="prompt">Close the Chromebook when your teacher begins. Move to: <b>Approve as offered</b>, <b>Approve but change the terms</b>, <b>Need more information</b>, or <b>Decline</b>. Be ready to explain what evidence mattered.</div>
+<textarea data-save id="moveReflection" placeholder="After the MOVE: What evidence mattered most to you? What information did you still want?"></textarea>
+</div>
+
+<div class="mission">
+<h2>Mission 2 — Edpuzzle</h2>
+<p>As you watch, look for information that would have helped you make the MOVE decisions.</p>
+<a class="btn primary" target="_blank" href="https://edpuzzle.com/assignments/6abc023bbc917f9ee54bfbec/watch">Open Edpuzzle</a>
+<label><input type="checkbox" data-save id="edDone" style="width:auto"> I completed the Edpuzzle.</label>
+</div>
+
+<div class="mission">
+<h2>Connect the Dots</h2>
+<div class="prompt"><b>Credit behavior → credit history → credit report → credit score / creditworthiness → lending decisions and terms</b></div>
+<p><span class="vocab" title="A record of how someone has used and repaid credit over time.">Credit history</span> is the record. A <span class="vocab" title="A record of credit accounts and related information collected by a consumer reporting company.">credit report</span> organizes that information. A <span class="vocab" title="A number created from credit-report information to predict credit risk. A person can have more than one.">credit score</span> is a number created from report information to predict risk. <span class="vocab" title="How risky a lender believes it would be to lend to someone.">Creditworthiness</span> is the lender's broader judgment of risk.</p>
+</div>
+
+<div class="mission">
+<h2>Mission 3 — Credit Report Case File: Jordan Lee</h2>
+<p class="warn"><b>Fictional classroom report.</b> Never enter your own personal credit information into this assignment.</p>
+<div class="report">
+<h3>Jordan Lee — Simplified Credit Report</h3>
+<p><b>Addresses:</b> 1840 Cedar Ave; 771 Pine St</p>
+<div class="acct"><b>Northstar Bank Visa</b><br>Opened 3 years ago · Limit $2,000 · Reported balance $1,650 · Open · No late payments</div>
+<div class="acct"><b>Summit Auto Finance</b><br>Opened 18 months ago · Balance $7,900 · Open · One 30-day late payment 8 months ago · Current since</div>
+<div class="acct"><b>Harbor Student Card</b><br>Opened 5 months ago · Limit $500 · Balance $0 · Open · No late payments</div>
+<div class="acct"><b>Metro Retail Bank</b><br>Opened 2 months ago · Limit $1,200 · Balance $940 · Open · Current</div>
+<div class="acct"><b>Canyon Credit Union</b><br>Balance $0 · Report shows OPEN</div>
+<div class="acct"><b>Frontier Card Services</b><br>Opened 1 month ago · Limit $3,000 · Balance $420 · Current</div>
+<div class="acct"><b>Recent inquiries:</b> Harbor Student Card; Frontier Card Services</div>
+</div>
+<h3>Jordan's Notes</h3>
+<ul>
+<li>Jordan recognizes Northstar, Summit, and Harbor.</li>
+<li>Jordan has never lived at 771 Pine St.</li>
+<li>Jordan remembers the Summit late payment.</li>
+<li>Jordan closed Canyon six months ago and has confirmation.</li>
+<li>Jordan does not recognize the name Metro Retail Bank.</li>
+<li>Jordan says they never opened Frontier Card Services.</li>
+</ul>
+<div class="grid">
+<div><b>Evidence that helps Jordan</b><textarea data-save id="caseHelp"></textarea></div>
+<div><b>Evidence that could concern a lender</b><textarea data-save id="caseConcern"></textarea></div>
+<div><b>Something Jordan should investigate</b><textarea data-save id="caseInvestigate"></textarea></div>
+<div><b>Something we still cannot know from this report</b><textarea data-save id="caseUnknown"></textarea></div>
+</div>
+<button onclick="showCaseReveal()">Check the case file</button>
+<div id="caseReveal" class="reveal hidden">
+<b>Investigator notes:</b> Metro Retail Bank may be legitimate: some store cards appear under the issuing bank's name, so investigate before calling it fraud. Canyon appears to contain a reporting error. Frontier plus an unfamiliar inquiry raises a stronger identity-theft concern. The Summit late payment is negative, but Jordan says it is accurate. Negative does not automatically mean inaccurate.
+</div>
+</div>
+
+<div class="mission">
+<h2>Mission 4 — What Actually Matters?</h2>
+<p>For each example, <b>predict first</b>. The examples are randomized each session.</p>
+<div id="factorDeck"></div>
+<h3>Utilization Lab</h3>
+<p>Jordan has a $2,000 revolving credit limit. Change the reported balance.</p>
+<input id="utilBal" type="range" min="0" max="2000" step="100" value="100" oninput="updateUtil()">
+<div class="prompt">Balance: <b id="balOut">$100</b> · Utilization: <b id="utilOut">5%</b></div>
+<textarea data-save id="utilNotice" placeholder="What does utilization tell a lender that simply knowing the balance does not?"></textarea>
+<div class="reveal"><b>Remember:</b> Lower utilization generally shows less reliance on available revolving credit. Do not treat 30% as a magic good/bad cliff.</div>
+<h3>Hard or Soft?</h3>
+<table><tr><th>Situation</th><th>What to know</th></tr>
+<tr><td>You apply for a new credit card.</td><td>May create a <span class="vocab" title="A credit check connected to an application for new credit that may affect a score.">hard inquiry</span>.</td></tr>
+<tr><td>You check your own credit report.</td><td>A <span class="vocab" title="A credit check such as reviewing your own report that does not affect a score.">soft inquiry</span>; checking your own report does not hurt your score.</td></tr></table>
+<p class="ok"><b>You do not have one universal credit score.</b> Different scoring models, products, report data, and timing can produce different scores.</p>
+</div>
+
+<div class="mission">
+<h2>Mission 5 — Brisk Investigation: Something Is Wrong With My Credit</h2>
+<div class="prompt"><b>YOUR MISSION: INVESTIGATE THE CREDIT CASE</b><br>Something is wrong with Taylor Morgan’s credit report—but not everything that looks suspicious is actually an error or fraud.</div>
+<p><b>Case File — Taylor Morgan, age 20</b></p>
+<ol>
+<li>A creditor called <b>Metro Retail Bank</b> appears on the report, but Taylor does not recognize that name.</li>
+<li>A <b>late payment from three years ago</b> appears on the report. Taylor wants it removed because it hurts.</li>
+<li><b>Canyon Credit Union</b> shows an account as <b>OPEN</b>, but Taylor believes the account was closed.</li>
+<li><b>Frontier Card Services</b> shows a recently opened account that Taylor says they never opened.</li>
+<li>Taylor received an offer that says: <b>“Pay $499 and we can erase all negative credit information.”</b></li>
+</ol>
+<div class="card">
+<b>Your job in Brisk</b>
+<ul>
+<li>Investigate <b>at least 3 of the 5 findings</b>.</li>
+<li>Ask questions to uncover information that is not yet visible.</li>
+<li>For each finding, determine: <b>What is happening? What evidence supports your conclusion? What should Taylor do next?</b></li>
+<li>Do not assume something is fraud just because it looks unfamiliar.</li>
+</ul>
+<p><b>Start in Brisk by choosing one numbered finding and telling Brisk what you want to find out.</b></p>
+</div>
+<a class="btn primary" target="_blank" href="https://app.briskteaching.com/ws/24i4gi">Launch Credit Report Investigation</a>
+<p><b>Your Brisk conversation is not the graded assignment.</b> When you have resolved at least three findings, return here and write your own report.</p>
+<label><input type="checkbox" data-save id="briskDone" style="width:auto"> I resolved at least three findings in Brisk using evidence.</label>
+<h3>Credit Investigation Report — 10 formative points</h3>
+<p>Write <b>5–7 sentences</b>. Explain what you discovered, identify important evidence, recommend what the consumer should do next, and justify why.</p>
+<details><summary>Optional sentence frame</summary><p>My investigation suggests ___. One important piece of evidence was ___, which matters because ___. I also discovered ___. Based on this evidence, the consumer should ___. This is the best next step because ___.</p></details>
+<textarea data-save id="investigationReport" style="min-height:150px" placeholder="Write your independent Credit Investigation Report here."></textarea>
+<table><tr><th>Criterion</th><th>Points</th></tr><tr><td>Accurately explains what happened</td><td>3</td></tr><tr><td>Uses specific evidence</td><td>3</td></tr><tr><td>Appropriate next action</td><td>2</td></tr><tr><td>Explains why the action makes sense</td><td>2</td></tr></table>
+</div>
+
+<div class="mission">
+<h2>Mission 6 — Build Credit From Zero</h2>
+<p><b>Avery is 18</b>, has a part-time job, uses checking and a debit card, and has never borrowed money. Avery has no established credit history.</p>
+<p>Choose <b>THREE</b> actions you would recommend first and <b>ONE</b> action Avery should avoid. Defend your plan.</p>
+<div id="averyChoices"></div>
+<textarea data-save id="averyReason" placeholder="Defend your plan with evidence from today's lesson."></textarea>
+<div id="averyMsg" class="feedback hidden"></div>
+<button onclick="checkAvery()">Check my plan</button>
+</div>
+
+<div class="mission">
+<h2>Save This for Real Life</h2>
+<div class="grid">
+<div class="card"><b>Get your report</b><p>Use the federally authorized source.</p><a class="btn" target="_blank" href="https://www.annualcreditreport.com/">AnnualCreditReport.com</a></div>
+<div class="card"><b>Check it</b><p>Look for unfamiliar accounts, wrong payment status, incorrect balances/limits, closed accounts shown open, duplicates, and identity errors.</p></div>
+<div class="card"><b>Fix errors</b><p>Dispute inaccurate information with the reporting company and the company that supplied it. Keep supporting records.</p><a class="btn" target="_blank" href="https://www.consumerfinance.gov/ask-cfpb/how-do-i-dispute-an-error-on-my-credit-report-en-314/">CFPB dispute guide</a></div>
+<div class="card"><b>Protect your credit</b><p>A credit freeze is free and does not hurt your score. A fraud alert tells creditors to take identity-verification steps.</p><a class="btn" target="_blank" href="https://www.consumerfinance.gov/ask-cfpb/what-is-a-credit-freeze-or-security-freeze-on-my-credit-report-en-1341/">CFPB freeze guide</a></div>
+</div>
+</div>
+
+<div class="mission">
+<h2>Final 10 Minutes — 10-Question Quiz</h2>
+<p>Complete this independently. Submit once you are ready.</p>
+<div id="quiz"></div>
+<button class="primary" onclick="gradeQuiz()">Submit Quiz</button>
+<div id="quizResult" class="feedback hidden"></div>
+</div>
+
+<div class="mission">
+<h2>Finish</h2>
+<p>Make sure your work is saved. Your PDF puts completion and quiz results at the top.</p>
+<button class="primary" onclick="saveNow()">Save Now</button>
+<button onclick="downloadPDF(false)">Save PDF</button>
+<button onclick="downloadPDF(true)">Emergency PDF</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const WEB_APP_URL='https://script.google.com/macros/s/AKfycbzg8wwPGFVDR8Ummz7nyOXmYcF93x6nu9oKmLH77ZMW0S97DrJfkQNvGpfabphZyq_A/exec';
+const SECRET='credit-day3-2026';
+let sessionCode='', saveTimer=null, quizScore=null;
+const factorItems=[
+["Paying credit accounts on time","affect","Payment history is an important part of credit scoring."],
+["Using $1,800 of a $2,000 revolving limit","affect","Being close to a revolving credit limit can affect a score."],
+["How long credit accounts have been established","affect","Credit history over time can matter."],
+["Applying for several new credit accounts in a short period","affect","Recent credit activity can matter."],
+["Account history and types of credit accounts","affect","Scoring models can consider the number and types/history of accounts."],
+["Checking your own credit report","nohurt","Checking your own report does not hurt your score."],
+["Your salary","separate","Income is not itself a credit-score factor, though a lender may consider income separately."],
+["Your race","separate","Race is not a credit-score factor."],
+["Your marital status","separate","Marital status is not a credit-score factor."],
+["Using a debit card often","separate","Debit-card use does not by itself establish a credit history."],
+["Carrying a card balance and paying interest","separate","You do not need to carry debt or pay interest just to build credit."],
+["A credit freeze","nohurt","A security freeze does not hurt a credit score."]
+];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function renderFactors(){
+ const d=document.getElementById('factorDeck'); d.innerHTML='';
+ shuffle(factorItems).forEach((x,i)=>{
+  let el=document.createElement('div'); el.className='factor'; el.dataset.key=x[0];
+  el.innerHTML=`<b>${x[0]}</b><div class="choices">
+  <button onclick="factorPick(this,'affect')">Can affect score</button>
+  <button onclick="factorPick(this,'nohurt')">Doesn't hurt score</button>
+  <button onclick="factorPick(this,'separate')">Not a score factor / separate</button>
+  <button onclick="factorPick(this,'unsure')">Not sure</button></div><div class="feedback hidden"></div>`;
+  d.appendChild(el);
+ });
+}
+function factorPick(btn,val){
+ const box=btn.closest('.factor'), item=factorItems.find(x=>x[0]===box.dataset.key), fb=box.querySelector('.feedback');
+ box.dataset.answer=val; fb.classList.remove('hidden');
+ fb.textContent=(val===item[1]?'Yes. ':'Reconsider. ')+item[2];
+ scheduleSave(); updateCompletion();
+}
+function updateUtil(){let v=+document.getElementById('utilBal').value;balOut.textContent='$'+v.toLocaleString();utilOut.textContent=Math.round(v/2000*100)+'%'}
+const avery=[
+["Open an appropriate starter/secured card and use it sparingly.","good"],
+["Pay every bill on time.","good"],
+["Keep revolving balances relatively low.","good"],
+["Carry a balance every month to prove you can handle debt.","avoid"],
+["Apply for five cards immediately.","avoid"],
+["Monitor credit reports.","good"],
+["Borrow money solely to create a payment history.","avoid"],
+["Keep an older no-fee account open when appropriate.","good"]
+];
+function renderAvery(){averyChoices.innerHTML=avery.map((x,i)=>`<label style="display:block"><input style="width:auto" type="checkbox" data-avery="${i}"> ${x[0]}</label>`).join('')}
+function checkAvery(){let ids=[...document.querySelectorAll('[data-avery]:checked')].map(x=>+x.dataset.avery);let good=ids.filter(i=>avery[i][1]==='good').length, bad=ids.filter(i=>avery[i][1]==='avoid').length;averyMsg.classList.remove('hidden');averyMsg.textContent=ids.length<4?'Choose four total: three recommendations and one to avoid.':(good>=3&&bad>=1?'Your choices include three responsible credit-building actions and at least one behavior to avoid. Now make sure your written defense explains why.':'Reconsider: you need three responsible actions and one behavior Avery should avoid.');scheduleSave();updateCompletion()}
+const quizData=[
+{q:"Which statement best distinguishes a credit report from a credit score?",o:["A report is a record of credit information; a score is a number generated from report information to predict risk.","A report is only a list of debts; a score is a list of payments.","A report is created only after a loan denial; a score exists before borrowing.","A report and a score are two names for the same document."],a:0},
+{q:"Jordan has paid every bill on time but is using $1,800 of a $2,000 card limit. Which fact could still concern a scoring model?",o:["Jordan has a credit card.","Jordan pays on time.","Jordan is using a very high share of available revolving credit.","Jordan has a credit limit."],a:2},
+{q:"Which action does NOT hurt a credit score?",o:["Missing a required payment.","Checking your own credit report.","Applying for several new accounts quickly.","Using nearly all available revolving credit."],a:1},
+{q:"A person finds a credit card on a report that they never opened. What is the strongest next step?",o:["Ignore it until a lender asks about it.","Pay the balance to make it disappear.","Close every legitimate account immediately.","Investigate possible identity theft and take protective/dispute steps using official sources."],a:3},
+{q:"Which statement about credit scores is accurate?",o:["Everyone has one permanent score.","A person can have multiple scores because different models and report data may be used.","Income determines the score range.","Checking a report creates a new score penalty."],a:1},
+{q:"A report lists an account as open even though the consumer has proof it was closed. What is this?",o:["A normal hard inquiry.","An accurate negative item.","A report error that can be disputed.","Proof of identity theft by itself."],a:2},
+{q:"A late payment from three years ago is accurate. What should the consumer understand?",o:["Accurate negative information generally cannot be removed simply because it hurts the report.","Any negative item can be erased for a fee.","The consumer should report identity theft.","Accurate late payments never matter after one year."],a:0},
+{q:"Avery has never used credit. Which statement is most accurate?",o:["Avery automatically has excellent credit.","Avery automatically has bad credit.","Avery must borrow a large amount immediately.","Avery may have little or no established credit history; that is not the same as a bad history."],a:3},
+{q:"Which behavior is NOT necessary to build credit?",o:["Paying credit obligations on time.","Keeping revolving balances relatively low.","Carrying a balance and paying interest every month.","Using credit responsibly over time."],a:2},
+{q:"What is a credit freeze designed to do?",o:["Erase accurate negative history.","Restrict prospective creditors' access to the credit file, helping prevent new-account fraud.","Increase a score by a fixed number of points.","Replace all fraud alerts automatically."],a:1}
+];
+function renderQuiz(){quiz.innerHTML=quizData.map((x,i)=>`<div class="quizq"><b>${i+1}. ${x.q}</b>${x.o.map((o,j)=>`<label><input style="width:auto" type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${o}</label>`).join('')}</div>`).join('')}
+function gradeQuiz(){let n=0,answered=0;quizData.forEach((x,i)=>{let r=document.querySelector(`input[name=q${i}]:checked`);if(r){answered++;if(+r.value===x.a)n++}});if(answered<10){quizResult.classList.remove('hidden');quizResult.textContent=`Answer all 10 questions before submitting. (${answered}/10 answered)`;return}quizScore=n;quizResult.classList.remove('hidden');quizResult.innerHTML=`<b>Score: ${n}/10 (${n*10}%)</b><br>${n>=8?'Strong mastery.':n>=6?'Review the items you were least certain about.':'Use your case-file notes and Save This for Real Life panel to review.'}`;scheduleSave();updateCompletion()}
+function collect(){
+ let s={};document.querySelectorAll('[data-save]').forEach(el=>s[el.id]=el.type==='checkbox'?el.checked:el.value);
+ s.factorAnswers=[...document.querySelectorAll('.factor')].map(x=>({key:x.dataset.key,answer:x.dataset.answer||''}));
+ s.avery=[...document.querySelectorAll('[data-avery]:checked')].map(x=>+x.dataset.avery);
+ s.quiz=[...Array(10)].map((_,i)=>{let r=document.querySelector(`input[name=q${i}]:checked`);return r?r.value:''});
+ s.quizScore=quizScore; return s
+}
+function apply(s){if(!s)return;document.querySelectorAll('[data-save]').forEach(el=>{if(s[el.id]!==undefined)el.type==='checkbox'?el.checked=!!s[el.id]:el.value=s[el.id]});if(s.avery)(s.avery||[]).forEach(i=>{let e=document.querySelector(`[data-avery="${i}"]`);if(e)e.checked=true});if(s.quiz)(s.quiz||[]).forEach((v,i)=>{if(v!==''){let e=document.querySelector(`input[name=q${i}][value="${v}"]`);if(e)e.checked=true}});quizScore=s.quizScore??null;if(quizScore!==null){quizResult.classList.remove('hidden');quizResult.innerHTML=`<b>Saved quiz score: ${quizScore}/10 (${quizScore*10}%)</b>`}updateCompletion()}
+function startSession(){let v=studentCode.value.trim();if(v.length<3){idMsg.textContent='Enter your teacher-assigned code first.';return}sessionCode=v;studentCode.disabled=true;idMsg.textContent='Session locked to '+v+'. Autosave is now active.';let local=localStorage.getItem('creditDay3_'+v.toLowerCase());if(local)apply(JSON.parse(local));loadCloud();updateCompletion()}
+function scheduleSave(){if(!sessionCode)return;clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,700)}
+async function saveNow(){if(!sessionCode){saveStatus.textContent='Enter code first';return}let state=collect();localStorage.setItem('creditDay3_'+sessionCode.toLowerCase(),JSON.stringify(state));saveStatus.textContent='Saved locally';if(WEB_APP_URL.startsWith('http')){try{let r=await fetch(WEB_APP_URL,{method:'POST',body:JSON.stringify({secret:SECRET,action:'save_state',studentId:sessionCode,state})});let j=await r.json();if(j.ok)saveStatus.textContent='Saved to cloud'}catch(e){saveStatus.textContent='Local saved; cloud unavailable'}}updateCompletion()}
+async function loadCloud(){if(!WEB_APP_URL.startsWith('http'))return;try{let r=await fetch(WEB_APP_URL,{method:'POST',body:JSON.stringify({secret:SECRET,action:'load_state',studentId:sessionCode})});let j=await r.json();if(j.state){apply(j.state);saveStatus.textContent='Restored from cloud'}}catch(e){}}
+function showCaseReveal(){caseReveal.classList.remove('hidden');scheduleSave();updateCompletion()}
+function updateCompletion(){let checks=[moveReflection.value.trim().length>10,edDone.checked,caseHelp.value.trim().length>5,caseConcern.value.trim().length>5,caseInvestigate.value.trim().length>5,caseUnknown.value.trim().length>5,[...document.querySelectorAll('.factor')].filter(x=>x.dataset.answer).length>=10,utilNotice.value.trim().length>10,briskDone.checked,investigationReport.value.trim().length>80,averyReason.value.trim().length>20,quizScore!==null];let p=Math.round(checks.filter(Boolean).length/checks.length*100);pct.textContent=p+'%'}
+document.addEventListener('input',e=>{if(e.target.matches('[data-save]')){scheduleSave();updateCompletion()}});document.addEventListener('change',e=>{if(e.target.matches('[data-save],[data-avery],input[type=radio]')){scheduleSave();updateCompletion()}});
+function downloadPDF(emergency){const {jsPDF}=window.jspdf;let pdf=new jsPDF({unit:'pt',format:'letter'}),y=45;function line(t,bold=false){pdf.setFont('helvetica',bold?'bold':'normal');let lines=pdf.splitTextToSize(String(t||''),510);if(y+lines.length*14>740){pdf.addPage();y=45}pdf.text(lines,50,y);y+=lines.length*14+5}line('Day 3 — Your Financial Reputation',true);line('Student code: '+(sessionCode||studentCode.value||'Not entered'));line('Completion: '+pct.textContent,true);line('Quiz: '+(quizScore===null?'Not submitted':quizScore+'/10'),true);line(emergency?'EMERGENCY BACKUP PDF — generated from work currently in this browser.':'Student Work Record');let s=collect();[['MOVE reflection',s.moveReflection],['Case: helps Jordan',s.caseHelp],['Case: lender concerns',s.caseConcern],['Case: investigate',s.caseInvestigate],['Case: unknown',s.caseUnknown],['Utilization conclusion',s.utilNotice],['Credit Investigation Report',s.investigationReport],['Build Credit From Zero reasoning',s.averyReason]].forEach(x=>{line(x[0],true);line(x[1]||'(blank)')});pdf.save('Day3-Credit-'+(sessionCode||'student')+'.pdf')}
+renderFactors();renderAvery();renderQuiz();updateUtil();updateCompletion();
+</script>
+</body></html>
